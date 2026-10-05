@@ -2,11 +2,11 @@ import SwiftUI
 
 struct BooksCarouselView: View {
     let categoria: CategoriaLivro
-    @StateObject private var viewModel: BookViewModel
+    @State private var viewModel: BookViewModel
 
     init(categoria: CategoriaLivro) {
         self.categoria = categoria
-        _viewModel = StateObject(wrappedValue: BookViewModel(categoria: categoria))
+        _viewModel = State(wrappedValue: BookViewModel(categoria: categoria))
     }
 
     var body: some View {

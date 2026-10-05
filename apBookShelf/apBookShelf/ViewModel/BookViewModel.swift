@@ -1,11 +1,11 @@
 import Foundation
-import Combine
+import Observation
 
-@MainActor
-final class BookViewModel: ObservableObject {
-    @Published var livros: [Livro] = []
-    @Published var carregando = false
-    @Published var mensagemErro: String?
+@Observable
+final class BookViewModel {
+    var livros: [Livro] = []
+    var carregando = false
+    var mensagemErro: String?
     
     private let service = BookService()
     private let categoria: CategoriaLivro
@@ -19,9 +19,7 @@ final class BookViewModel: ObservableObject {
         mensagemErro = nil
         
         do {
-            livros = try await service.buscarLivros(
-                categoria: categoria
-            )
+            livros = try await service.buscarLivros(categoria: categoria)
         } catch {
             mensagemErro = error.localizedDescription
         }
