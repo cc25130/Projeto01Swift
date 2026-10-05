@@ -2,66 +2,54 @@ import SwiftUI
 
 struct BookCardView: View {
     let book: Livro
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            AsyncImage(url: imageURL) { phase in
+            AsyncImage(url: book.dadosLivro.capaURL) { phase in
                 switch phase {
                 case .empty:
                     ZStack {
                         Rectangle()
                             .fill(.quaternary)
-
                         ProgressView()
                     }
-
+                    
                 case .success(let image):
                     image
                         .resizable()
                         .scaledToFill()
-
+                    
                 case .failure:
                     ZStack {
                         Rectangle()
                             .fill(.quaternary)
-
                         Image(systemName: "book.closed")
                             .font(.largeTitle)
                             .foregroundStyle(.secondary)
                     }
-
+                    
                 @unknown default:
                     Rectangle()
                         .fill(.quaternary)
                 }
             }
-            .frame(width: 230, height: 330)
-            .clipShape(RoundedRectangle(cornerRadius: 18))
-
-            VStack(alignment: .leading, spacing: 6) {
-                Text(book.dadosLivro.titulo)
-                    .font(.headline)
+            .frame(width: 180, height: 260)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            
+            Text(book.dadosLivro.titulo)
+                .font(.headline)
+                .lineLimit(2)
+                .frame(width: 180, alignment: .leading)
+            
+            if let autores = book.dadosLivro.autores {
+                Text(autores.joined(separator: ", "))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
                     .lineLimit(2)
-
-                if let authors = book.dadosLivro.autores {
-                    Text(authors.joined(separator: ", "))
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(2)
-                }
+                    .frame(width: 180, alignment: .leading)
             }
         }
-        .frame(width: 230)
-    }
-
-    private var imageURL: URL? {
-        guard let thumbnail = book.dadosLivro.linksImagens?.thumbnail else {
-            return nil
-        }
-
-        let secureURL = thumbnail.replacingOccurrences(of: "http://", with: "https://")
-
-        return URL(string: secureURL)
+        .frame(width: 180, alignment: .leading)
     }
 }
 
@@ -69,7 +57,7 @@ struct BookCardView: View {
     BookCardView(
         book: Livro(
             id: "1",
-            dadosLivro : DadosLivro(
+            dadosLivro: DadosLivro(
                 titulo: "Livro de Exemplo",
                 subtitulo: nil,
                 autores: ["Autor"],

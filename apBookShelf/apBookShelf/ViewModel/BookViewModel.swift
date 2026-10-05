@@ -1,29 +1,31 @@
 import Foundation
-import Observation
+import Combine
 
-@Observable
-final class BookViewModel {
-    var books: [Livro] = []
-    var isLoading = false
-    var errorMessage: String?
-
-    func fetchBooks(category: CategoriaLivro) async {
-        isLoading = true
-        errorMessage = nil
-        books = []
-
+@MainActor
+final class BookViewModel: ObservableObject {
+    @Published var livros: [Livro] = []
+    @Published var carregando = false
+    @Published var mensagemErro: String?
+    
+    private let service = BookService()
+    private let categoria: CategoriaLivro
+    
+    init(categoria: CategoriaLivro) {
+        self.categoria = categoria
+    }
+    
+    func carregarLivros() async {
+        carregando = true
+        mensagemErro = nil
+        
         do {
-            books = try await BookService.shared.fetchBooks(category: category.apiQuery)
-        } catch BookServiceError.noBooks {
-            errorMessage = "Não encontramos livros para esta categoria."
-        } catch BookServiceError.invalidResponse {
-            errorMessage = "O servidor não respondeu corretamente."
-        } catch BookServiceError.decodingError {
-            errorMessage = "Não foi possível interpretar os dados dos livros."
+            livros = try await service.buscarLivros(
+                categoria: categoria
+            )
         } catch {
-            errorMessage = "Não foi possível carregar os livros. Verifique sua conexão."
+            mensagemErro = error.localizedDescription
         }
-
-        isLoading = false
+        
+        carregando = false
     }
 }

@@ -1,54 +1,43 @@
 import Foundation
 
-enum CategoriaLivro: String, CaseIterable, Hashable {
+enum CategoriaLivro: String, CaseIterable, Hashable, Identifiable {
     case ficcao = "Ficção"
     case fantasia = "Fantasia"
     case misterio = "Mistério"
     case historia = "História"
     case ciencia = "Ciência"
-
-    var apiQuery: String {
+    
+    var id: String {
+        rawValue
+    }
+    
+    var consultaAPI: String {
         switch self {
         case .ficcao:
-            return "fiction"
+            return "subject:fiction"
         case .fantasia:
-            return "fantasy"
+            return "subject:fantasy"
         case .misterio:
-            return "mystery"
+            return "subject:mystery"
         case .historia:
-            return "history"
+            return "subject:history"
         case .ciencia:
-            return "science"
+            return "subject:science"
         }
     }
-
-    var icon: String {
+    
+    var icone: String {
         switch self {
         case .ficcao:
-            return "book.fill"
+            return "book.closed"
         case .fantasia:
             return "sparkles"
         case .misterio:
             return "magnifyingglass"
         case .historia:
-            return "building.columns.fill"
+            return "clock.arrow.circlepath"
         case .ciencia:
             return "atom"
-        }
-    }
-
-    var description: String {
-        switch self {
-        case .ficcao:
-            return "Descubra histórias e mundos criados pela imaginação."
-        case .fantasia:
-            return "Explore mundos fantásticos repletos de aventuras."
-        case .misterio:
-            return "Encontre histórias cheias de enigmas e descobertas."
-        case .historia:
-            return "Conheça livros sobre diferentes períodos da humanidade."
-        case .ciencia:
-            return "Explore descobertas, fenômenos e ideias científicas."
         }
     }
 }

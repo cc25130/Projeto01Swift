@@ -1,13 +1,23 @@
 import Foundation
 
-struct RespostaApi: Decodable {
-    let totalItens: Int
+struct RespostaLivros: Decodable {
+    let totalItems: Int
     let itens: [Livro]?
+    
+    enum CodingKeys: String, CodingKey {
+        case totalItems
+        case itens = "items"
+    }
 }
 
-struct Livro: Decodable, Hashable, Identifiable {
+struct Livro: Decodable, Identifiable, Hashable {
     let id: String
     let dadosLivro: DadosLivro
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case dadosLivro = "volumeInfo"
+    }
 }
 
 struct DadosLivro: Decodable, Hashable {
@@ -24,6 +34,34 @@ struct DadosLivro: Decodable, Hashable {
     let avaliacaoMedia: Double?
     let quantidadeAvaliacoes: Int?
     let linkPrevia: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case titulo = "title"
+        case subtitulo = "subtitle"
+        case autores = "authors"
+        case editora = "publisher"
+        case dataPublicacao = "publishedDate"
+        case descricao = "description"
+        case quantidadePaginas = "pageCount"
+        case categorias = "categories"
+        case linksImagens = "imageLinks"
+        case idioma = "language"
+        case avaliacaoMedia = "averageRating"
+        case quantidadeAvaliacoes = "ratingsCount"
+        case linkPrevia = "previewLink"
+    }
+    
+    var capaURL: URL? {
+        guard let endereco = linksImagens?.thumbnail
+            ?? linksImagens?.smallThumbnail else {
+            return nil
+        }
+        
+        return URL(string: endereco.replacingOccurrences(
+            of: "http://",
+            with: "https://"
+        ))
+    }
 }
 
 struct LinksImagens: Decodable, Hashable {
