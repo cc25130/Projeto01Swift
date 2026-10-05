@@ -28,17 +28,20 @@ struct BookService {
         components.queryItems = [
             URLQueryItem(name: "q", value: categoria.consultaAPI),
             URLQueryItem(name: "maxResults", value: "5"),
-            URLQueryItem(name: "printType", value: "books")
+            URLQueryItem(name: "printType", value: "books"),
+            URLQueryItem(name: "key", value: "AIzaSyClL-H6Pe1B16IIGhtiQfcx8gj1SRVyubU"),
+
         ]
         
-        guard let url = components.url else {
+        guard let url = components.url
+        else {
             throw ErroLivros.urlInvalida
         }
         
         let (data, response) = try await URLSession.shared.data(from: url)
         
-        guard let resposta = response as? HTTPURLResponse,
-              (200...299).contains(resposta.statusCode) else {
+        guard let resposta = response as? HTTPURLResponse, (200...299).contains(resposta.statusCode)
+        else {
             throw ErroLivros.respostaInvalida
         }
         
