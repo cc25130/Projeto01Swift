@@ -22,72 +22,46 @@ struct BookDetailView: View {
 
                     AsyncImage(url: livro.dadosLivro.capaURL) { phase in
                         switch phase {
-                        case .empty:
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 24)
-                                    .fill(.white.opacity(0.08))
-
-                                ProgressView()
-                                    .tint(.white)
-                            }
-
                         case .success(let image):
                             image
                                 .resizable()
                                 .scaledToFill()
 
                         case .failure:
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 24)
-                                    .fill(.white.opacity(0.08))
-
+                            capaPlaceholder {
                                 Image(systemName: "book.closed")
                                     .font(.system(size: 55))
                                     .foregroundStyle(.white.opacity(0.5))
                             }
 
                         default:
-                            RoundedRectangle(cornerRadius: 24)
-                                .fill(.white.opacity(0.08))
+                            capaPlaceholder {
+                                ProgressView()
+                                    .tint(.white)
+                            }
                         }
                     }
                     .frame(width: 210, height: 310)
-                    .clipShape(
-                        RoundedRectangle(cornerRadius: 24)
-                    )
-                    .shadow(
-                        color: .black.opacity(0.4),
-                        radius: 20,
-                        y: 12
-                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 24))
+                    .shadow(color: .black.opacity(0.4), radius: 20, y: 12)
 
                     VStack(spacing: 8) {
                         Text(livro.dadosLivro.titulo)
-                            .font(
-                                .system(
-                                    size: 30,
-                                    weight: .bold,
-                                    design: .rounded
-                                )
-                            )
+                            .font(.system(size: 30, weight: .bold, design: .rounded))
                             .foregroundStyle(.white)
                             .multilineTextAlignment(.center)
 
                         if let subtitulo = livro.dadosLivro.subtitulo {
                             Text(subtitulo)
                                 .font(.subheadline)
-                                .foregroundStyle(
-                                    .white.opacity(0.55)
-                                )
+                                .foregroundStyle(.white.opacity(0.55))
                                 .multilineTextAlignment(.center)
                         }
 
                         if let autores = livro.dadosLivro.autores {
                             Text(autores.joined(separator: ", "))
                                 .font(.headline)
-                                .foregroundStyle(
-                                    .white.opacity(0.8)
-                                )
+                                .foregroundStyle(.white.opacity(0.8))
                                 .multilineTextAlignment(.center)
                         }
                     }
@@ -98,103 +72,29 @@ struct BookDetailView: View {
                             Image(systemName: "star.fill")
                                 .foregroundStyle(.yellow)
 
-                            Text(
-                                "\(nota, specifier: "%.1f")"
-                            )
-                            .fontWeight(.bold)
-                            .foregroundStyle(.white)
+                            Text("\(nota, specifier: "%.1f")")
+                                .fontWeight(.bold)
+                                .foregroundStyle(.white)
 
-                            if let quantidade =
-                                livro.dadosLivro.quantidadeAvaliacoes {
-                                Text(
-                                    "(\(quantidade) avaliações)"
-                                )
-                                .foregroundStyle(
-                                    .white.opacity(0.5)
-                                )
+                            if let quantidade = livro.dadosLivro.quantidadeAvaliacoes {
+                                Text("(\(quantidade) avaliações)")
+                                    .foregroundStyle(.white.opacity(0.5))
                             }
                         }
                         .font(.subheadline)
                     }
 
                     HStack(spacing: 12) {
-
-                        if let paginas =
-                            livro.dadosLivro.quantidadePaginas {
-                            VStack(spacing: 6) {
-                                Image(systemName: "book.pages")
-                                    .foregroundStyle(.white.opacity(0.7))
-
-                                Text("\(paginas)")
-                                    .font(.headline)
-                                    .foregroundStyle(.white)
-
-                                Text("páginas")
-                                    .font(.caption)
-                                    .foregroundStyle(
-                                        .white.opacity(0.45)
-                                    )
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(
-                                .white.opacity(0.07)
-                            )
-                            .clipShape(
-                                RoundedRectangle(cornerRadius: 18)
-                            )
+                        if let paginas = livro.dadosLivro.quantidadePaginas {
+                            infoCard(icon: "book.pages", title: "\(paginas)", subtitle: "páginas")
                         }
 
-                        if let data =
-                            livro.dadosLivro.dataPublicacao {
-                            VStack(spacing: 6) {
-                                Image(systemName: "calendar")
-                                    .foregroundStyle(.white.opacity(0.7))
-
-                                Text(data)
-                                    .font(.headline)
-                                    .foregroundStyle(.white)
-
-                                Text("publicação")
-                                    .font(.caption)
-                                    .foregroundStyle(
-                                        .white.opacity(0.45)
-                                    )
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(
-                                .white.opacity(0.07)
-                            )
-                            .clipShape(
-                                RoundedRectangle(cornerRadius: 18)
-                            )
+                        if let data = livro.dadosLivro.dataPublicacao {
+                            infoCard(icon: "calendar", title: data, subtitle: "publicação")
                         }
 
-                        if let idioma =
-                            livro.dadosLivro.idioma {
-                            VStack(spacing: 6) {
-                                Image(systemName: "globe")
-                                    .foregroundStyle(.white.opacity(0.7))
-
-                                Text(idioma.uppercased())
-                                    .font(.headline)
-                                    .foregroundStyle(.white)
-
-                                Text("idioma")
-                                    .font(.caption)
-                                    .foregroundStyle(
-                                        .white.opacity(0.45)
-                                    )
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(
-                                .white.opacity(0.07)
-                            )
-                            .clipShape(
-                                RoundedRectangle(cornerRadius: 18)
-                            )
+                        if let idioma = livro.dadosLivro.idioma {
+                            infoCard(icon: "globe", title: idioma.uppercased(), subtitle: "idioma")
                         }
                     }
 
@@ -205,52 +105,30 @@ struct BookDetailView: View {
 
                             Text(editora)
                                 .font(.subheadline)
-                                .foregroundStyle(
-                                    .white.opacity(0.7)
-                                )
+                                .foregroundStyle(.white.opacity(0.7))
 
                             Spacer()
                         }
                     }
 
                     if let descricao = livro.dadosLivro.descricao {
-                        VStack(
-                            alignment: .leading,
-                            spacing: 12
-                        ) {
+                        VStack(alignment: .leading, spacing: 12) {
                             Text("SINOPSE")
-                                .font(.caption)
-                                .fontWeight(.bold)
-                                .tracking(2)
-                                .foregroundStyle(
-                                    .white.opacity(0.45)
-                                )
+                                .font(.caption.bold())
+                                .foregroundStyle(.white.opacity(0.45))
 
                             Text(descricao)
                                 .font(.body)
-                                .foregroundStyle(
-                                    .white.opacity(0.75)
-                                )
+                                .foregroundStyle(.white.opacity(0.75))
                                 .lineSpacing(5)
                         }
-                        .frame(
-                            maxWidth: .infinity,
-                            alignment: .leading
-                        )
+                        .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(20)
-                        .background(
-                            .white.opacity(0.06)
-                        )
-                        .clipShape(
-                            RoundedRectangle(cornerRadius: 22)
-                        )
+                        .background(.white.opacity(0.06), in: RoundedRectangle(cornerRadius: 22))
                     }
 
-                    if let link = livro.dadosLivro.linkPrevia,
-                       let url = URL(string: link) {
-                        Link(
-                            destination: url
-                        ) {
+                    if let link = livro.dadosLivro.linkPrevia, let url = URL(string: link) {
+                        Link(destination: url) {
                             HStack {
                                 Image(systemName: "book.fill")
 
@@ -259,17 +137,12 @@ struct BookDetailView: View {
 
                                 Spacer()
 
-                                Image(
-                                    systemName: "arrow.up.right"
-                                )
+                                Image(systemName: "arrow.up.right")
                             }
                             .foregroundStyle(.black)
                             .padding(18)
                             .frame(maxWidth: .infinity)
-                            .background(.white)
-                            .clipShape(
-                                RoundedRectangle(cornerRadius: 18)
-                            )
+                            .background(.white, in: RoundedRectangle(cornerRadius: 18))
                         }
                     }
                 }
@@ -279,8 +152,34 @@ struct BookDetailView: View {
             }
         }
         .toolbarColorScheme(.dark, for: .navigationBar)
-        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    @ViewBuilder
+    private func capaPlaceholder<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 24)
+                .fill(.white.opacity(0.08))
+            content()
+        }
+    }
+
+    private func infoCard(icon: String, title: String, subtitle: String) -> some View {
+        VStack(spacing: 6) {
+            Image(systemName: icon)
+                .foregroundStyle(.white.opacity(0.7))
+
+            Text(title)
+                .font(.headline)
+                .foregroundStyle(.white)
+
+            Text(subtitle)
+                .font(.caption)
+                .foregroundStyle(.white.opacity(0.45))
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .background(.white.opacity(0.07), in: RoundedRectangle(cornerRadius: 18))
     }
 }
 
