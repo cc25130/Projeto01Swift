@@ -14,15 +14,15 @@ enum CategoriaLivro: String, CaseIterable, Hashable, Identifiable {
     var consultaAPI: String {
         switch self {
         case .ficcao:
-            return "subject:fiction"
+            return "fiction"
         case .fantasia:
-            return "subject:fantasy"
+            return "fantasy"
         case .misterio:
-            return "subject:mystery"
+            return "mystery"
         case .historia:
-            return "subject:history"
+            return "history"
         case .ciencia:
-            return "subject:science"
+            return "science"
         }
     }
     
@@ -39,5 +39,6 @@ enum CategoriaLivro: String, CaseIterable, Hashable, Identifiable {
         case .ciencia:
             return "atom"
         }
+        
     }
 }

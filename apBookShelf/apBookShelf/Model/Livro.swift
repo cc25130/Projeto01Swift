@@ -3,21 +3,12 @@ import Foundation
 struct RespostaLivros: Decodable {
     let totalItems: Int
     let itens: [Livro]?
-    
-    enum CodingKeys: String, CodingKey {
-        case totalItems
-        case itens = "items"
-    }
 }
 
 struct Livro: Decodable, Identifiable, Hashable {
     let id: String
     let dadosLivro: DadosLivro
     
-    enum CodingKeys: String, CodingKey {
-        case id
-        case dadosLivro = "volumeInfo"
-    }
 }
 
 struct DadosLivro: Decodable, Hashable {
@@ -52,8 +43,7 @@ struct DadosLivro: Decodable, Hashable {
     }
     
     var capaURL: URL? {
-        guard let endereco = linksImagens?.thumbnail
-            ?? linksImagens?.smallThumbnail else {
+        guard let endereco = linksImagens?.thumbnail ?? linksImagens?.smallThumbnail else {
             return nil
         }
         
